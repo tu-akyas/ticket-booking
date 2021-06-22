@@ -4,6 +4,6 @@ from .models import RegisteredUser, Journey, Train, Ticket
 # Register your models here.
 
 
-
-class AdminModel:
+@admin.register(RegisteredUser, Train, Journey, Ticket)
+class AdminModel(admin.ModelAdmin):
     pass

@@ -6,16 +6,19 @@ from django.contrib.auth.models import User, Permission
 
 class RegisteredUser(models.Model):
     GENDER = (
-        ('MALE', 'male'),
-        ('FEMALE', 'female'),
-        ('OTHER', 'other'),
-        ('NOT_SAY', 'not_say')
+        ('MALE', 'Male'),
+        ('FEMALE', 'Female'),
+        ('OTHER', 'Other'),
+        ('NOT_SAY', 'I prefer not to say')
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, default=1)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     gender = models.CharField(max_length=10, choices=GENDER)
     birth_date = models.DateField()
     mobile_number = models.CharField(max_length=15)
+
+    def __str__(self):
+        return f"{self.user}"
 
 
 class Train(models.Model):
@@ -25,6 +28,9 @@ class Train(models.Model):
     estimated_departure = models.TimeField()
     estimated_arrival = models.TimeField()
 
+    def __str__(self):
+        return f"{self.name} ({self.pk})"
+
 
 class Journey(models.Model):
 
@@ -33,6 +39,7 @@ class Journey(models.Model):
 
     train = models.ForeignKey(Train, on_delete=models.CASCADE)
     journey_date = models.DateField()
+    Journey_cost = models.IntegerField(default=10)
 
 
 class Ticket(models.Model):
