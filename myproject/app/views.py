@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, decorators
 from .forms import UserForm, RegisteredUserForm
 from django.template import RequestContext
+from .models import Train
 
 
 # Create your views here.
@@ -66,3 +67,30 @@ def signup(request):
 def logout_user(request):
     logout(request)
     return render(request, 'app/login.html', {})
+
+def all_trains(request):
+    all_trains = Train.objects.all()
+    if request.user.is_authenticated:
+        context = {'user': request.user, 'all_trains': all_trains}
+        template = 'app/all_trains_user.html'
+    else:
+        context = {'all_trains': all_trains}
+        template = 'app/all_trains.html'
+    return render(request, template, context)
+
+def train_detail(request, train_id):
+    train = get_object_or_404(Train, pk=train_id)
+    if request.user.is_authenticated:
+        context = {'user': request.user, 'train': train}
+        template = 'app/train_details_user.html'
+    else:
+        context = {'train': train}
+        template = 'app/train_details.html'
+    return render(request, template, context)
+
+def booking(request, train_id):
+    if not request.user.is_authenticated:
+        return render(request, 'app/login.html')
+    train = get_object_or_404(Train, pk=train_id)
+    return render(request, 'app/booking.html', {})
+

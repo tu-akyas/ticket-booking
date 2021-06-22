@@ -1,0 +1,12 @@
+<h1> Trains Page </h1>
+
+{% if all_trains %}
+    <h3> Please find the Trains below </h3>
+    <ul>
+        {% for train in all_trains %}
+        <li><a href="{% url 'app:train_detail' train.id %}">{{train}}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h3>You don't have any Trains here!!</h3>
+{% endif %}

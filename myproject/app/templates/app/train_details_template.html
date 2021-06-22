@@ -1,0 +1,11 @@
+<h1> Train Details page</h1>
+<p>
+    {{train}}
+    <br>Train Name = {{train.name}}
+    <br>Train Number = {{train.pk}}
+    <br>Source = {{train.source}}
+    <br>Destination = {{train.destination}}
+    <br>Departure = {{train.estimated_departure}}
+    <br>Arrival = {{train.estimated_arrival}}
+    <br><li><a href="{% url 'app:booking' train.id%}">Book Now</a> </li>
+</p>

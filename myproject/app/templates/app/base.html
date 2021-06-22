@@ -35,6 +35,11 @@
                         <span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp; Home
                     </a>
                 </li>
+                <li class="{% block trains_active %}{% endblock %}">
+                    <a href="{% url 'app:all_trains' %}">
+                        <span class="glyphicon glyphicon-road" aria-hidden="true"></span>&nbsp; Trains
+                    </a>
+                </li>
                 <li class="{% block name_active %}{% endblock %}">
                     <a href=#>
                         <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp; Name
@@ -49,7 +54,9 @@
 <!--            </form>-->
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; {% block user %} Guest User {% endblock %}
+                    <a href=#>
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; {% block user %} Guest User {% endblock %}
+                    </a>
                 </li>
                 {% block user_base %}
                 <li class="{% block signup_active %}{% endblock %}">
@@ -67,7 +74,7 @@
         </div>
     </div>
 </nav>
-{% block body %}
+{% block base_body %}
 {% endblock %}
 </body>
 </html>
