@@ -40,9 +40,9 @@
                         <span class="glyphicon glyphicon-road" aria-hidden="true"></span>&nbsp; Trains
                     </a>
                 </li>
-                <li class="{% block name_active %}{% endblock %}">
-                    <a href=#>
-                        <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp; Name
+                <li class="{% block tickets_active %}{% endblock %}">
+                    <a href= "{% url 'app:tickets' %}">
+                        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp; Tickets
                     </a>
                 </li>
             </ul>
@@ -54,7 +54,7 @@
 <!--            </form>-->
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href=#>
+                    <a href="{% url 'app:user_profile' %}">
                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; {% block user %} Guest User {% endblock %}
                     </a>
                 </li>

@@ -1,1 +1,44 @@
-<h1> Booking </h1>
+{% extends 'app/base.html' %}
+
+{% block trains_active %}active{% endblock %}
+{% block user %} {{user.username}} {% endblock %}
+
+{% block user_base %}
+    {% include 'app/user_base.html' %}
+{% endblock %}
+
+{% block base_body %}
+    {% include 'app/train_details_template.html' %}
+<!--    <h1> Booking Page under construction </h1>-->
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading"> <h4>Booking for {{train}}</h4></div>
+            <div class="panel-body">
+                {% if error_message %}
+                    <div class="alert alert-danger">
+                        <p><strong>{{ error_message }}</strong></p>
+                    </div>
+                {% endif %}
+                {% if success_message %}
+                    <div class="alert alert-success">
+                        <p>
+                            <strong>{{ success_message }}</strong>
+                            <a href="{% url 'app:ticket_details' ticket.id %}" >  - View Ticket </a>
+                        </p>
+                    </div>
+                {% endif %}
+
+                <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% include 'app/form_template.html' %}
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

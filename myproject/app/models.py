@@ -27,6 +27,9 @@ class Train(models.Model):
     destination = models.CharField(max_length=50)
     estimated_departure = models.TimeField()
     estimated_arrival = models.TimeField()
+    operated_days = models.CharField(max_length=15, default="All Days")
+    ticket_price = models.IntegerField(default=10)
+    capacity = models.IntegerField(default=50)
 
     def __str__(self):
         return f"{self.name} ({self.pk})"
@@ -39,7 +42,10 @@ class Journey(models.Model):
 
     train = models.ForeignKey(Train, on_delete=models.CASCADE)
     journey_date = models.DateField()
-    Journey_cost = models.IntegerField(default=10)
+    booked_seats = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.train} - {self.journey_date}"
 
 
 class Ticket(models.Model):
@@ -52,3 +58,6 @@ class Ticket(models.Model):
     journey = models.ForeignKey(Journey, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS)
     admit_count = models.IntegerField()
+
+    def __str__(self):
+        return f"Ticket# {self.pk} | {self.journey} | {self.user} | \n Admit: {self.admit_count} | {self.status}"

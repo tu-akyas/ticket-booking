@@ -1,0 +1,51 @@
+{% extends 'app/base.html' %}
+
+{% block tickets_active %}active{% endblock %}
+{% block user %} {{user.username}} {% endblock %}
+
+{% block user_base %}
+    {% include 'app/user_base.html' %}
+{% endblock %}
+
+{% block base_body %}
+<div class="container">
+    {% if ticket.status == "CANCELLED" %}
+    <div class="panel panel-danger"> {% else %} <div class="panel panel-success">{% endif %}
+        <div class="panel-heading"><h4>Akyas Railways - {{ticket.status}}</h4></div>
+        <div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Ticket No:  {{ticket.id}}
+                </li>
+                <li class="list-group-item">
+                    {{ticket.journey}} - {{ticket.journey.train.estimated_departure}}
+                </li>
+                <li class="list-group-item">
+                    Admit : {{ticket.admit_count}}
+                </li>
+                {% if ticket.status == "CONFIRMED" %}
+                <a href="{% url 'app:cancel_ticket' ticket.id %}">
+                    <button type="button" class="btn btn-danger"> Cancel Ticket </button>
+                </a>
+                {% endif %}
+                {% if error_message %}
+                    <div class="alert alert-danger">
+                        <p><strong>{{ error_message }}</strong></p>
+                    </div>
+                {% endif %}
+                {% if success_message %}
+                    <div class="alert alert-success">
+                        <p><strong>{{ success_message }}</strong></p>
+                    </div>
+                {% endif %}
+            </ul>
+            <div class="panel-footer">
+                <a href="{% url 'app:tickets' %}">
+                    <button type="button"> All Tickets </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

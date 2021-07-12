@@ -1,11 +1,32 @@
-<h1> Train Details page</h1>
-<p>
-    {{train}}
-    <br>Train Name = {{train.name}}
-    <br>Train Number = {{train.pk}}
-    <br>Source = {{train.source}}
-    <br>Destination = {{train.destination}}
-    <br>Departure = {{train.estimated_departure}}
-    <br>Arrival = {{train.estimated_arrival}}
-    <br><li><a href="{% url 'app:booking' train.id%}">Book Now</a> </li>
-</p>
+<div class="container-fluid">
+    <h1> Details of {{train}}</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tr>
+                <th> Train </th>
+                <td> {{train}}</td>
+            </tr>
+
+            <tr>
+                <th> Source</th>
+                <td> {{train.source}} </td>
+                <th> Departure </th>
+                <td>{{train.estimated_departure}}</td>
+            </tr>
+            <tr>
+                <th> Destination</th>
+                <td> {{train.destination}} </td>
+                <th> Arrival </th>
+                <td>{{train.estimated_arrival}}</td>
+            </tr>
+            <tr>
+                <th> Operated On </th>
+                <td> {{train.operated_days}}</td>
+            </tr>
+            <tr>
+                <th> Ticket Price</th>
+                <td> ${{train.ticket_price}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
