@@ -6,6 +6,30 @@ from .models import Train, Journey, Ticket, RegisteredUser, Feedback
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
+# User defined functions not related to views. These functions are used in some logics
+def get_frequent_train(user=None):
+    '''
+        1. Returns most booked trains in the system
+        2. Returns most booked trains by the user
+    '''
+    if user:
+        ticket_objects = Ticket.objects.all()
+    else:
+        ticket_objects = Ticket.objects.filter(user=user)
+
+    booked_trains = []
+    for ticket in ticket_objects:
+        booked_trains.append(ticket.journey.train)
+
+    if len(booked_trains) <= 0:
+        for train in Train.objects.all():
+            booked_trains.append(train)
+
+    # returns the element has most occurence in the list
+    frequently_booked_train = max(set(booked_trains), key=booked_trains.count)
+    print(f"inside function {frequently_booked_train}")
+
+    return frequently_booked_train
 
 # Create your views here.
 def index(request):
@@ -19,6 +43,30 @@ def home(request):
     else:
         context = {}
         template = 'app/home.html'
+
+    frequent_train = get_frequent_train()
+    print(f"Inside View Frequent_train:{frequent_train}")
+    user_frequent_train = get_frequent_train(user=request.user)
+    print(f"Inside View User Frequent_train:{user_frequent_train}")
+
+    suggested_trains = [
+        {
+            "train": Train.objects.get(id=1),
+            "description": "This is Our First train operated in our service"
+        },
+
+        {
+            "train": Train.objects.get(id=2),
+            "description": "This is Our Second train operated in our service. Must try this!"
+        }
+    ]
+
+    context.update({
+        "suggested_trains": suggested_trains,
+        "frequent_train": frequent_train,
+        "user_frequent_train": user_frequent_train
+    })
+
     return render(request, template, context)
 
 
@@ -30,7 +78,7 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return render(request, 'app/home_user.html', {"user": user})
+                return home(request)
             else:
                 return render(request, 'app/login.html', {'error_message': 'Your account has been disabled'})
         else:

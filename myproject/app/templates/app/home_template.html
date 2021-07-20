@@ -1,7 +1,9 @@
+{% load static %}
+
 <!-- Welcome header part -->
 <div class="jumbotron"
-     style="text-align: center; background:#99A3A4; margin-left: 20px; margin-right: 20px ">
-	<div class="container-fluid" >
+     style="text-align: center; background:#566573; margin-left: 20px; margin-right: 20px ">
+	<div class="container" style="background:#99A3A4" >
         <h2>Welcome to Akyas Railways !!</h2>
         <p> A smart ticket booking system.</p>
 	</div>
@@ -31,7 +33,9 @@
                     </p>
                 </div>
             {% endif %}
-			<button type="button" class="btn btn-success" data-toggle="modal" data-target="#feedbackForm"> Give feedback </button>
+			<button type="button" class="btn btn-success" data-toggle="modal" data-target="#feedbackForm" title="Feedback for this website">
+                Give feedback
+            </button>
 		</div>
 	</div>
 
@@ -71,7 +75,96 @@
         </div>
     </div>
 </div>
+<h3> Our Suggestions </h3>
+<!--Train suggestions-->
+<div class="row">
+    {% for suggestion in suggested_trains %}
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <div class="caption">
+                <h3>{{suggestion.train}}</h3>
+                <p> {{suggestion.description}} </p>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th> Source</th>
+                            <th> Departure </th>
+                            <th> Destination</th>
+                            <th> Arrival </th>
+                        </tr>
+                        <tr>
+                            <td> {{suggestion.train.source}} </td>
+                            <td> {{suggestion.train.estimated_departure}} </td>
+                            <td> {{suggestion.train.destination}} </td>
+                            <td> {{suggestion.train.estimated_arrival}} </td>
+                        </tr>
+                    </table>
+                </div>
+                <p><a href="{% url 'app:booking' suggestion.train.id %}" class="btn btn-primary" role="button">Book Now</a></p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
- <footer>
-     Thank you for understanding US
- </footer>
+<h3> Frequent Travels </h3>
+<div class="row">
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <img src="{% static 'app/images/c2.jpg' %}" alt="Train 1">
+            <div class="caption">
+                <h3>Your Frequent Bookings</h3>
+                <p>You have travelled frequently in <strong>{{user_frequent_train}}</strong>.
+                    We you a quick access for this booking. Enjoy your Journey
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th> Source</th>
+                            <th> Departure </th>
+                            <th> Destination</th>
+                            <th> Arrival </th>
+                        </tr>
+                        <tr>
+                            <td> {{user_frequent_train.source}} </td>
+                            <td> {{user_frequent_train.estimated_departure}} </td>
+                            <td> {{user_frequent_train.destination}} </td>
+                            <td> {{user_frequent_train.estimated_arrival}} </td>
+                        </tr>
+                    </table>
+                </div>
+                <p><a href="{% url 'app:booking' user_frequent_train.id %}" class="btn btn-primary" role="button">Book Now</a> </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <img src="{% static 'app/images/c3.jpg' %}" alt="Train 1">
+            <div class="caption">
+                <h3>Most loved train by our users</h3>
+                <p>
+                    <em> Check this out !!</em> Most of our users have travelled in <strong>{{frequent_train}}</strong> frequently.
+                    Enjoy your Journey
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th> Source</th>
+                            <th> Departure </th>
+                            <th> Destination</th>
+                            <th> Arrival </th>
+                        </tr>
+                        <tr>
+                            <td> {{frequent_train.source}} </td>
+                            <td> {{frequent_train.estimated_departure}} </td>
+                            <td> {{frequent_train.destination}} </td>
+                            <td>{{frequent_train.estimated_arrival}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <p><a href="{% url 'app:booking' frequent_train.id %}" class="btn btn-primary" role="button">Book Now</a> </p>
+            </div>
+        </div>
+    </div>
+</div>
