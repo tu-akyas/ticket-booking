@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, re
 from django.contrib.auth import authenticate, login, logout, decorators
 from .forms import UserForm, RegisteredUserForm, BookingForm
 from django.template import RequestContext
-from .models import Train, Journey, Ticket, RegisteredUser
+from .models import Train, Journey, Ticket, RegisteredUser, Feedback
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
@@ -229,3 +229,18 @@ def user_profile(request):
     context = {"reg_user": reg_user, "user_age": user_age}
 
     return render(request, template, context)
+
+
+def feedbacks(request):
+    feedback_received = False
+    if request.method == 'POST':
+        name = request.POST.get('Name')
+        email = request.POST.get('Email')
+        text = request.POST.get('Feedback')
+
+        feedback = Feedback(name=name, email=email, text=text)
+        feedback.save()
+
+        feedback_received = True
+        return render(request, 'app/home.html', {'feedback_received':feedback_received})
+    return render(request, 'app/home.html', {'feedback_received':feedback_received})

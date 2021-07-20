@@ -56,8 +56,17 @@ class Ticket(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     journey = models.ForeignKey(Journey, on_delete=models.CASCADE)
-    status = models.CharField(max_length=10, choices=STATUS)
+    status = models.TextField(max_length=10, choices=STATUS)
     admit_count = models.IntegerField()
 
     def __str__(self):
         return f"Ticket# {self.pk} | {self.journey} | {self.user} | \n Admit: {self.admit_count} | {self.status}"
+
+
+class Feedback(models.Model):
+    name = models.CharField(max_length=20, null=False, default="Unknown")
+    email = models.CharField(max_length=25, default=None)
+    text = models.CharField(max_length=1000, null=False, default="User Feedback (default)")
+
+    def __str__(self):
+        return f"{self.pk} - {self.name}"
