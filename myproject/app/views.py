@@ -5,38 +5,17 @@ from django.template import RequestContext
 from .models import Train, Journey, Ticket, RegisteredUser, Feedback
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from django.core.mail import send_mail
+from django.template import loader
+from django.conf import settings
 
-# User defined functions not related to views. These functions are used in some logics
-def get_frequent_train(user=None):
-    '''
-        1. Returns most booked trains in the system
-        2. Returns most booked trains by the user
-    '''
-    if user:
-        ticket_objects = Ticket.objects.all()
-    else:
-        ticket_objects = Ticket.objects.filter(user=user)
-
-    booked_trains = []
-    for ticket in ticket_objects:
-        booked_trains.append(ticket.journey.train)
-
-    if len(booked_trains) <= 0:
-        for train in Train.objects.all():
-            booked_trains.append(train)
-
-    # returns the element has most occurence in the list
-    frequently_booked_train = max(set(booked_trains), key=booked_trains.count)
-    print(f"inside function {frequently_booked_train}")
-
-    return frequently_booked_train
 
 # Create your views here.
 def index(request):
     return HttpResponseRedirect('home')
 
 
-def home(request):
+def home(request, feedback_received=False):
     if request.user.is_authenticated:
         context = {'user': request.user}
         template = 'app/home_user.html'
@@ -52,19 +31,25 @@ def home(request):
     suggested_trains = [
         {
             "train": Train.objects.get(id=1),
-            "description": "This is Our First train operated in our service"
+            "description": "This is Our First train operated by us! First is always best"
         },
 
         {
-            "train": Train.objects.get(id=2),
-            "description": "This is Our Second train operated in our service. Must try this!"
+            "train": Train.objects.get(id=3),
+            "description": "This is a fantasy Journey to Hogwarts inspired from Harry Potter! Enjoy your journey"
+        },
+
+        {
+            "train": Train.objects.get(id=5),
+            "description": "This is a journey to a fantasy Polar Island where you can play with snowman!"
         }
     ]
 
     context.update({
         "suggested_trains": suggested_trains,
         "frequent_train": frequent_train,
-        "user_frequent_train": user_frequent_train
+        "user_frequent_train": user_frequent_train,
+        "feedback_received": feedback_received
     })
 
     return render(request, template, context)
@@ -100,11 +85,13 @@ def signup(request):
         user.save()
         register_user.save()
 
+        send_user_registration_mail(user=user)
+
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return render(request, 'app/home_user.html', {'user': user})
+                return home(request)
     context = {
         "user_form": user_form,
         "registered_user_form": registered_user_form
@@ -193,11 +180,13 @@ def booking_journey(request, train_id):
 
         ticket.save()
         journey.save()
+        send_booking_confirmation_email(ticket)
 
         # Write a success message and develop booking_success HTML
         success_message = f"You have sucessfully booked your ticket,  <<Ticket No: {ticket.pk}>>"
         context = {
             "user": request.user,
+            "form": booking_form,
             "train": train,
             "ticket": ticket,
             "success_message": success_message
@@ -216,6 +205,11 @@ def tickets(request):
         return render(request, 'app/login.html')
 
     user_tickets = Ticket.objects.filter(user=request.user)
+
+    for ticket in user_tickets:
+        if ticket.status == 'CONFIRMED' and ticket.journey.journey_date <= date.today():
+            ticket.status = 'COMPLETED'
+            ticket.save()
     user_tickets = user_tickets[::-1]
 
     template = 'app/tickets.html'
@@ -250,6 +244,7 @@ def cancel_ticket(request, ticket_id):
 
         journey.save()
         ticket.save()
+        send_booking_cancellation_email(ticket=ticket)
 
         context = {
             'ticket': ticket,
@@ -280,7 +275,6 @@ def user_profile(request):
 
 
 def feedbacks(request):
-    feedback_received = False
     if request.method == 'POST':
         name = request.POST.get('Name')
         email = request.POST.get('Email')
@@ -289,6 +283,97 @@ def feedbacks(request):
         feedback = Feedback(name=name, email=email, text=text)
         feedback.save()
 
+        send_feedback_notification(feedback)
+
         feedback_received = True
-        return render(request, 'app/home.html', {'feedback_received':feedback_received})
-    return render(request, 'app/home.html', {'feedback_received':feedback_received})
+    return home(request, feedback_received=feedback_received)
+
+
+# User defined functions not related to views. These functions are used in some logics
+def get_frequent_train(user=None):
+    '''
+        1. Returns most booked trains in the system
+        2. Returns most booked trains by the user
+    '''
+    if user:
+        ticket_objects = Ticket.objects.all()
+    else:
+        ticket_objects = Ticket.objects.filter(user=user)
+
+    booked_trains = []
+    for ticket in ticket_objects:
+        booked_trains.append(ticket.journey.train)
+
+    if len(booked_trains) <= 0:
+        for train in Train.objects.all():
+            booked_trains.append(train)
+
+    # returns the element has most occurence in the list
+    frequently_booked_train = max(set(booked_trains), key=booked_trains.count)
+    print(f"inside function {frequently_booked_train}")
+
+    return frequently_booked_train
+
+
+def send_simple_email(subject, email_to, template, context):
+    body = ""
+    html_message = loader.render_to_string(template_name=template, context=context)
+    send_mail(subject=subject, message=body, from_email=settings.EMAIL_HOST_USER,
+              recipient_list=[email_to], html_message=html_message)
+    return None
+
+
+def send_user_registration_mail(user):
+    template = 'app/registration_email.html'
+    context = {'user': user}
+    subject = "Akyas Railways| Registration Successful"
+    email_to = user.email
+    send_simple_email(
+        subject=subject,
+        context=context,
+        email_to=email_to,
+        template=template
+    )
+    return None
+
+
+def send_booking_confirmation_email(ticket):
+    template = 'app/ticket_booking_email.html'
+    context = {'ticket': ticket}
+    subject = f"{ticket} booking confirmation"
+    email_to = ticket.user.email
+    send_simple_email(
+        subject=subject,
+        context=context,
+        email_to=email_to,
+        template=template
+    )
+    return None
+
+
+def send_booking_cancellation_email(ticket):
+    template = 'app/ticket_cancellation_email.html'
+    context = {'ticket': ticket}
+    subject = f"Booking Cancelled {ticket}"
+    email_to = ticket.user.email
+    send_simple_email(
+        subject=subject,
+        context=context,
+        email_to=email_to,
+        template=template
+    )
+    return None
+
+
+def send_feedback_notification(feedback):
+    template = 'app/feedback_email.html'
+    context = {'feedback': feedback}
+    subject = f"Feedback #{feedback.pk} received from {feedback.name}"
+    email_to = "tu.akyas+testing@gmail.com"
+    send_simple_email(
+        subject=subject,
+        context=context,
+        email_to=email_to,
+        template=template
+    )
+    return None

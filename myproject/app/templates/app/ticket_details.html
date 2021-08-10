@@ -10,7 +10,9 @@
 {% block base_body %}
 <div class="container">
     {% if ticket.status == "CANCELLED" %}
-    <div class="panel panel-danger"> {% else %} <div class="panel panel-success">{% endif %}
+    <div class="panel panel-danger"> {% elif ticket.status == "CONFIRMED" %}
+    <div class="panel panel-success"> {% elif ticket.status == "COMPLETED" %}
+    <div class="panel panel-info">{% endif %}
         <div class="panel-heading"><h4>Akyas Railways - {{ticket.status}}</h4></div>
         <div class="panel-body">
             <ul class="list-group">

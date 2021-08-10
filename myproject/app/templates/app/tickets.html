@@ -41,7 +41,9 @@
                     <tbody>
                     {% for ticket in user_tickets %}
                         {% if ticket.status == "CANCELLED" %}
-                        <tr class="danger"> {%else%} <tr> {%endif%}
+                        <tr class="danger"> {%elif ticket.status == "COMPLETED"%}
+                        <tr class="info"> {%elif ticket.status == "CONFIRMED"%}
+                        <tr> {%endif%}
                             <td> {{ticket.pk}} </td>
                             <td> {{ticket.admit_count}} </td>
                             <td> {{ticket.journey.train}} </td>

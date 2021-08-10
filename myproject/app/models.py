@@ -51,7 +51,8 @@ class Journey(models.Model):
 class Ticket(models.Model):
     STATUS = (
         ('CONFIRMED', 'confirmed'),
-        ('CANCELLED', 'cancelled')
+        ('CANCELLED', 'cancelled'),
+        ('COMPLETED', 'completed')
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
@@ -60,7 +61,7 @@ class Ticket(models.Model):
     admit_count = models.IntegerField()
 
     def __str__(self):
-        return f"Ticket# {self.pk} | {self.journey} | {self.user} | \n Admit: {self.admit_count} | {self.status}"
+        return f"Ticket# {self.pk} | {self.journey} | {self.user} | Admit: {self.admit_count} | {self.status}"
 
 
 class Feedback(models.Model):
