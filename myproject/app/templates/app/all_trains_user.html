@@ -1,0 +1,13 @@
+{% extends 'app/base.html' %}
+
+{% block trains_active %}active{% endblock %}
+{% block user %} {{user.username}} {% endblock %}
+
+
+{% block user_base %}
+    {% include 'app/user_base.html' %}
+{% endblock %}
+
+{% block base_body %}
+    {% include 'app/all_trains_template.html' %}
+{% endblock %}

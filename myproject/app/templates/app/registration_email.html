@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Confirmation</title>
+</head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+  text-align: left;
+}
+</style>
+<body>
+<h2>User Registration Success with Akyas Railways</h2>
+<p>Welcome {{user.first_name}},
+    <br><br>you have successfully created an account with <strong>Akyas Railways.</strong>
+    <br>Please find your details below.
+    <table>
+    <tr>
+        <th style="text-align:right">Registration ID: </th>
+        <td> {{user.pk}} </td>
+    </tr>
+    <tr>
+        <th style="text-align:right">Username: </th>
+        <td> {{user.username}}</td>
+    </tr>
+    </table>
+<br>
+<br>Thank-you
+<br>With Regards,
+<br>Akyas Railways team
+</p>
+</body>
+<footer>
+<br>Din’t create an account here? It could be possible that someone would have typed in your email address by mistake.
+<br>Feel free to ignore this email.
+
+<br><br>For queries and customer support reach out to us on <a href="mailto:csit6910+support@gmail.com">csit6910+support@gmail.com</a>
+</footer>
+</html>

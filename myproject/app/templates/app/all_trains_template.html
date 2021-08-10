@@ -1,0 +1,50 @@
+<div class="container-fluid all_trains-container">
+    <h1> Trains </h1>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {% if all_trains %}
+                {% if error_message %}
+                    <p><strong>{{ error_message }}</strong></p>
+                {% endif %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Train Number</th>
+                        <th>Train Name</th>
+                        <th>Source</th>
+                        <th>Destination</th>
+                        <th>Estimated Departure</th>
+                        <th>Estimated Arrival</th>
+                        <th>Ticket Price</th>
+                        <th>Operated on</th>
+                        <th>Bookings</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for train in all_trains %}
+                        <tr>
+                            <td> {{train.pk}} </td>
+                            <td> {{train.name}} </td>
+                            <td> {{train.source}} </td>
+                            <td> {{train.destination}} </td>
+                            <td> {{train.estimated_departure}} </td>
+                            <td> {{train.estimated_arrival}} </td>
+                            <td> ${{train.ticket_price}} </td>
+                            <td> {{train.operated_days}} </td>
+                            <td>
+                                <a href = "{% url 'app:booking' train.id%}" >
+                                    <button type="button"> BOOK NOW </button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                {% else %}
+                    <h3>No trains available!!</h3>
+                {% endif %}
+                </table>
+		</div>
+    </div>
+
+</div>

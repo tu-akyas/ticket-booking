@@ -1,0 +1,75 @@
+{% extends 'app/base.html' %}
+
+{% block tickets_active %}active{% endblock %}
+{% block user %} {{user.username}} {% endblock %}
+
+{% block user_base %}
+    {% include 'app/user_base.html' %}
+{% endblock %}
+
+{% block base_body %}
+    <div class="container-fluid all_trains-container">
+        <h1> Your Tickets </h1>
+        <a href="{% url 'app:all_trains' %}">
+            <button type="button" class="btn btn-primary btn-block">
+                <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> Book a new ticket
+            </button>
+        </a>
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {% if user_tickets %}
+                {% if error_message %}
+                    <p><strong>{{ error_message }}</strong></p>
+                {% endif %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Ticket #</th>
+                        <th>Admit</th>
+                        <th>Train</th>
+                        <th>Date of Journey</th>
+                        <th>Source</th>
+                        <th>Departure</th>
+                        <th>Destination</th>
+                        <th>Arrival</th>
+                        <th>Status</th>
+                        <th>View Ticket</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for ticket in user_tickets %}
+                        {% if ticket.status == "CANCELLED" %}
+                        <tr class="danger"> {%elif ticket.status == "COMPLETED"%}
+                        <tr class="info"> {%elif ticket.status == "CONFIRMED"%}
+                        <tr> {%endif%}
+                            <td> {{ticket.pk}} </td>
+                            <td> {{ticket.admit_count}} </td>
+                            <td> {{ticket.journey.train}} </td>
+                            <td> {{ticket.journey.journey_date}} </td>
+                            <td> {{ticket.journey.train.source}} </td>
+                            <td> {{ticket.journey.train.estimated_departure}} </td>
+                            <td> {{ticket.journey.train.destination}} </td>
+                            <td> {{ticket.journey.train.estimated_arrival}} </td>
+                            <td >{{ticket.status}} </td>
+                            <td>
+                                <a href = "{% url 'app:ticket_details' ticket.id%}" >
+                                    <button type="button"> VIEW </button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                {% else %}
+                    <h3>You have not booked any tickets!!</h3>
+                {% endif %}
+                </table>
+		</div>
+    </div>
+
+</div>
+<!--    {% for ticket in user_tickets %}-->
+<!--        <li><a href="{% url 'app:ticket_details' ticket.id %}"> {{ticket}} </a> </li>-->
+<!--    {% endfor %}-->
+{% endblock %}

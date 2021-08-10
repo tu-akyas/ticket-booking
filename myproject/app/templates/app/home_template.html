@@ -1,0 +1,173 @@
+{% load static %}
+
+<!-- Welcome header part -->
+<div class="jumbotron"
+     style="text-align: center; background:#566573; margin-left: 20px; margin-right: 20px ">
+	<div class="container" style="background:#99A3A4" >
+        <h2>Welcome to Akyas Railways !!</h2>
+        <p> A smart ticket booking system.</p>
+	</div>
+</div>
+
+<!--About the project -->
+<div class="container-fluid">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+            <h3> About: </h3>
+        </div>
+        <div class="panel-body">
+            <p>
+                Hi! I am Akyas Ahamed, I started to develop this web application project during my MSc(IT) study period on May 2021.
+                It is a part of my coursework due on August 2021. I have decided to work on this project to develop more even after completing this coursework.
+                I believe this would help me to learn more and an ideal place to implement whatever I learn. I appreciate any suggestions on this website.
+                I would encourage you to leave some feedbacks on my work.
+                <br><br> Thank you
+                <br> - <em>Akyas</em>
+            </p>
+        </div>
+		<div class="panel-footer">
+            {% if feedback_received %}
+                <div class="alert alert-success">
+                    <p style="text-align: center">
+                        <strong>Thank you for your feedback! I will consider it for future developments. </strong>
+                    </p>
+                </div>
+            {% endif %}
+			<button type="button" class="btn btn-success" data-toggle="modal" data-target="#feedbackForm" title="Feedback for this website">
+                Give feedback
+            </button>
+		</div>
+	</div>
+
+<!--Feedback form modal-->
+	<div class="modal fade" id="feedbackForm" tabindex="-1" role="dialog" aria-labelledby="Feedback" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="feedbackTitle">Please give your feedbacks here !</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+				<div class="modal-body" style="background-color: #efecff;">
+					<form action="{% url 'app:feedbacks' %}" method="post">
+						{% csrf_token %}
+						<div class="form-group">
+                            <label for="name" style="float: left;">Your Name</label>
+                            <input type="text" class="form-control" name="Name" id="name" aria-describedby="name" placeholder="Enter name" required>
+                        </div>
+						<div class="form-group">
+                            <label for="email" style="float: left;">Email</label>
+                            <input type="email" class="form-control" name="Email" id="email" aria-describedby="email" placeholder="Enter email (Optional)">
+                        </div>
+						<div class="form-group">
+                            <label for="feedback" style="float: left;">Your Feedback</label>
+                            <textarea type="text" class="form-control" name="Feedback" id="feedback"
+                                          placeholder="Your Feedback" required></textarea>
+                        </div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-success">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <h3> Our Suggestions </h3>
+    <!--Train suggestions-->
+    <div class="row">
+        {% for suggestion in suggested_trains %}
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3>{{suggestion.train}}</h3>
+                    <p> {{suggestion.description}} </p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th> Source</th>
+                                <th> Departure </th>
+                                <th> Destination</th>
+                                <th> Arrival </th>
+                            </tr>
+                            <tr>
+                                <td> {{suggestion.train.source}} </td>
+                                <td> {{suggestion.train.estimated_departure}} </td>
+                                <td> {{suggestion.train.destination}} </td>
+                                <td> {{suggestion.train.estimated_arrival}} </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p><a href="{% url 'app:booking' suggestion.train.id %}" class="btn btn-primary" role="button">Book Now</a></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <h3> Frequent Travels </h3>
+    <div class="row">
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <img src="{% static 'app/images/c2.jpg' %}" alt="Train 1">
+                <div class="caption">
+                    <h3>Your Frequent Bookings</h3>
+                    <p>You have travelled frequently in <strong>{{user_frequent_train}}</strong>.
+                        We you a quick access for this booking. Enjoy your Journey
+                    </p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th> Source</th>
+                                <th> Departure </th>
+                                <th> Destination</th>
+                                <th> Arrival </th>
+                            </tr>
+                            <tr>
+                                <td> {{user_frequent_train.source}} </td>
+                                <td> {{user_frequent_train.estimated_departure}} </td>
+                                <td> {{user_frequent_train.destination}} </td>
+                                <td> {{user_frequent_train.estimated_arrival}} </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p><a href="{% url 'app:booking' user_frequent_train.id %}" class="btn btn-primary" role="button">Book Now</a> </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <img src="{% static 'app/images/c3.jpg' %}" alt="Train 1">
+                <div class="caption">
+                    <h3>Most loved train by our users</h3>
+                    <p>
+                        <em> Check this out !!</em> Most of our users have travelled in <strong>{{frequent_train}}</strong> frequently.
+                        Enjoy your Journey
+                    </p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th> Source</th>
+                                <th> Departure </th>
+                                <th> Destination</th>
+                                <th> Arrival </th>
+                            </tr>
+                            <tr>
+                                <td> {{frequent_train.source}} </td>
+                                <td> {{frequent_train.estimated_departure}} </td>
+                                <td> {{frequent_train.destination}} </td>
+                                <td>{{frequent_train.estimated_arrival}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p><a href="{% url 'app:booking' frequent_train.id %}" class="btn btn-primary" role="button">Book Now</a> </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

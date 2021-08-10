@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Akyas Railways{% endblock %}</title>
+    {% load static %}
+<!--    <link rel="shortcut icon" type="image/png" href="{%  static 'favicon.ico' %}"/>-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/style.css' %}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!--    <script src="{% static 'music/js/main.js' %}"></script>-->
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+
+        <!-- Header -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'app:index' %}">Akyas Railways</a>
+        </div>
+
+        <!-- Items -->
+        <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+                <li class="{% block home_active %}{% endblock %}">
+                    <a href="{% url 'app:home' %}">
+                        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp; Home
+                    </a>
+                </li>
+                <li class="{% block trains_active %}{% endblock %}">
+                    <a href="{% url 'app:all_trains' %}">
+                        <span class="glyphicon glyphicon-road" aria-hidden="true"></span>&nbsp; Trains
+                    </a>
+                </li>
+                <li class="{% block tickets_active %}{% endblock %}">
+                    <a href= "{% url 'app:tickets' %}">
+                        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp; Tickets
+                    </a>
+                </li>
+            </ul>
+<!--            <form class="navbar-form navbar-left" role="search" method="get" action="{% url 'app:index' %}">-->
+<!--                <div class="form-group">-->
+<!--                    <input type="text" class="form-control" name="q" value="{{ request.GET.q }}">-->
+<!--                </div>-->
+<!--                <button type="submit" class="btn btn-default">Search</button>-->
+<!--            </form>-->
+            <ul class="nav navbar-nav navbar-right">
+                <li class="{% block profile_active %}{% endblock %}">
+                    <a href="{% url 'app:user_profile' %}">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; {% block user %} Guest User {% endblock %}
+                    </a>
+                </li>
+                {% block user_base %}
+                <li class="{% block signup_active %}{% endblock %}">
+                    <a href="{% url 'app:signup' %}">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Signup
+                    </a>
+                </li>
+                <li class="{% block login_active %}{% endblock %}">
+                    <a href="{% url 'app:login_user' %}">
+                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Login
+                    </a>
+                </li>
+                {% endblock %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% block base_body %}
+{% endblock %}
+</body>
+
+<footer>
+    <div class="footer" style="background-color:black">
+        <div class="container">
+            <h2 style="text-align:center; color:grey"> Thankyou For Choosing Us! </h2>
+        </div>
+    </div>
+</footer>
+</html>

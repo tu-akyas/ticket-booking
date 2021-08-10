@@ -1,0 +1,49 @@
+{% extends 'app/base.html' %}
+
+{% block profile_active %}active{% endblock %}
+{% block user %} {{user.username}} {% endblock %}
+
+
+{% block user_base %}
+    {% include 'app/user_base.html' %}
+{% endblock %}
+
+{% block base_body %}
+    <div class="container">
+        <h1> Profile </h1>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <th class="col-lg-2"> <b> First Name:</b> </th>
+                        <td class="col-lg-4"> {{ reg_user.user.first_name}} </td>
+                        <th class="col-lg-2"> <b> Last Name:</b></th>
+                        <td class="col-lg-4"> {{reg_user.user.last_name}} </td>
+                    </tr>
+                    <tr>
+                        <th> <b> Username:</b> </th>
+                        <td> {{reg_user.user.username}} </td>
+                        <th> <b> Email:</b> </th>
+                        <td> {{reg_user.user.email}}  </td>
+                    </tr>
+                    <tr>
+                        <th> <b> Date Of Birth: </b> </th>
+                        <td> {{reg_user.birth_date}}  </td>
+                        <th> <b> Age:</b> </th>
+                        <td> {{user_age}} </td>
+                    </tr>
+                    <tr>
+                        <th> <b> Mobile Num:</b> </th>
+                        <td> {{reg_user.mobile_number}} </td>
+                        <th> <b> Gender </b> </th>
+                        <td> {{reg_user.gender}}  </td>
+                    </tr>
+                    <tr>
+                        <th></th><td></td>
+                        <th></th><td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
