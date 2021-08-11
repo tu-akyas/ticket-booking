@@ -14,7 +14,6 @@ kiwisolver==1.1.0
 matplotlib==3.0.3
 mypy==0.701
 mypy-extensions==0.4.1
-numpy==1.15.4
 oauthlib==3.0.1
 psycopg2==2.8.2
 PyJWT==1.7.1
