@@ -17,5 +17,4 @@ By cloning this repo you can run this web application on your local machine.
 
 Now you can play around the web application on your local host.
 
-### Thankyou!
-Thanks for visiting my project!
+### Thankyou for visiting my project!
