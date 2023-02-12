@@ -2,7 +2,7 @@
 ## Akyas Railways
 This is a web application project developed during my MSc(IT) study period on May 2021. It was a part of my coursework due on August 2021. 
 ## Working Model
-I have hosted working model of this web application in [**akyas-railways.herokuapp.com**](http://akyas-railways.herokuapp.com). You are welcome to visit this website and provide me feedback.
+I have hosted working model of this web application in [**csit6910.pythonanywhere.com**](https://csit6910.pythonanywhere.com/home/). You are welcome to visit this website and provide me feedback.
 ## Abstract
 This is a web application prototype for booking train tickets using **Python** and **Django**. Admin (i.e. Business owner) can create train and services with the necessary information based on the business requirement and publish them in the website. The Users (i.e. Customers) can register themselves in the website and book tickets for the service offered by the service providers.
 ## How to run this application
